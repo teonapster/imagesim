@@ -1,0 +1,3 @@
+# Module imagesim
+# RPC service class, partial path of RPC policy file
+com.imageSim.client.GreetingService, 1C59890935906ECD691C44FBE7E9079B.gwt.rpc

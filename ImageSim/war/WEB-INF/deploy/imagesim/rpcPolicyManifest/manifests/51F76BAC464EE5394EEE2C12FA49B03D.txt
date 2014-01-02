@@ -1,0 +1,2 @@
+serviceClass: com.imageSim.client.GreetingService
+path: 1C59890935906ECD691C44FBE7E9079B.gwt.rpc
