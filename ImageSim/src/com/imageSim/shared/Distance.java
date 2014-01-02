@@ -18,6 +18,12 @@ public class Distance {
 		return this.distance;
 	}
 	
+	/**
+	 * Find Euclidean Distance between two tables
+	 * @param p fist table
+	 * @param q second table
+	 * @return distance in double
+	 */
 	public static double euclideanDist(double [] p, double[] q){
 		double sum = 0.0;
 		//Equal lengths
