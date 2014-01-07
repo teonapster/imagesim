@@ -7,7 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form method='POST' action='fileUploaderServlet?upload=0&k=10&rf=1'>     
+<form method='POST' action='fileUploaderServlet?upload=0&rf=1' >
+<input type="hidden" name="kapa" value="<%= request.getAttribute("kapa") %>" />     
 <%@page import="com.imageSim.shared.Image"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -18,7 +19,9 @@ request.getSession().setAttribute("iq",img);
 for(int i=0;i<results.size();++i){%>
 <tr>
 	<td>
-		<img src='../images/<%= results.get(i).getFilename() %>' alt='id: <%= String.valueOf(results.get(i).getId()) %> filename: <%= results.get(i).getFilename()%>' width=100 height=100 >
+		<a href='../images/<%= results.get(i).getFilename() %>'> 
+			<img src='../images/<%= results.get(i).getFilename() %>' alt='id: <%= String.valueOf(results.get(i).getId()) %> filename: <%= results.get(i).getFilename()%>' width=100 height=100 >
+		</a> 
 	</td>
 	<td>
 		<input type='checkbox' name='positiveFeedback' value='<%= String.valueOf(results.get(i).getId()) %>'>
@@ -28,6 +31,7 @@ for(int i=0;i<results.size();++i){%>
 <% }%>
 <tr>
 	<td collspan=2>
+		
 		<input type='submit' value='Refresh'>
 	</td>
 </tr>

@@ -42,7 +42,7 @@ public class UploadServlet extends HttpServlet {
     private static final int MAX_FILE_SIZE      = 1024 * 1024 * 40; // 40MB
     private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 100; //100MB
     private static final double ORIGINAL_QUERY_WEIGHT   = 1.0;
-    private static final double POSITIVE_FEEDBACK_WEIGHT   = 0.8;
+    private static final double POSITIVE_FEEDBACK_WEIGHT   = 0.5;
     private Image searchImage = null;
     private DBConnector db = new DBConnector();
     /**
@@ -75,7 +75,8 @@ public class UploadServlet extends HttpServlet {
             rf = Integer.valueOf(request.getParameter("rf"))==1?true:false;
         }catch (NumberFormatException nfe){}
         
-        String kNum  = request.getParameter("k");
+        
+        String kNum = null;
         int imgId=0;
         // configures upload settings
         DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -100,67 +101,79 @@ public class UploadServlet extends HttpServlet {
         db.connect();
         try {
             // parses the request's content to extract file data
-        	if(!rf){
+        	
             List formItems = upload.parseRequest(request);
             Iterator iter = formItems.iterator();
             
             
             
             // iterates over form's fields
-            
+            if(ServletFileUpload.isMultipartContent(request))
             while (iter.hasNext()) {
                 FileItem item = (FileItem) iter.next();
                 
                 // processes only fields that are not form fields
-                if (!item.isFormField()) {
+                if (!item.isFormField()&&!rf) {
                      fileName = new File(item.getName()).getName();
                     filePath = uploadPath + File.separator + fileName;
                     File storeFile = new File(filePath);
                      
                     // saves the file on disk
                     item.write(storeFile);
+                    
+                    
+                    //Color Extraction & insert to DB
+                    ColorExtract ce = new ColorExtract();
+                    List<double[]> colorList  = ce.FeatureExtractRun(filePath);
+                    
+                    //Texture Extraction & insert to DB
+                    TextureExtract te = new TextureExtract();
+                    List<double[]> textureList  = te.FeatureExtractRun(filePath);
+                   
+                    //ShapeExtraction & insert to DB
+                    ShapeExtract se = new ShapeExtract();
+                    List<double[]> shapeList  = se.FeatureExtractRun(filePath);
+                    if(uploadMode){
+                    	imgId = db.insertImage(fileName);
+    	                db.insertCorrelogramVector(colorList, imgId);
+    	                db.insertTextureVector(textureList, imgId);
+    	                db.insertShapeVector(shapeList, imgId);
+                    }
+                    else if(!uploadMode && !rf){
+                    	searchImage = new Image(imgId,fileName);
+                    	searchImage.setColor(ArrayUtils.toPrimitive(ArrayUtils.toObject(colorList.get(0))));
+                    	searchImage.setShape(ArrayUtils.toPrimitive(ArrayUtils.toObject(shapeList.get(0))));
+                    	searchImage.setTexture(ArrayUtils.toPrimitive(ArrayUtils.toObject(textureList.get(0))));
+                    	request.setAttribute("imageQuery", searchImage);
+                    	Image [] results = getKRelevantImages(searchImage, Integer.parseInt(kNum));
+             	        request.setAttribute("images", Arrays.asList(results));
+                    }
+                }
+                else if (item.isFormField()){
+                	String fieldName = item.getFieldName();
+                	String fieldValue = item.getString();
+                	if(fieldName.equals("kapa")){
+                		kNum = fieldValue;
+                		request.setAttribute("kapa",Integer.parseInt(kNum));
+                	}
                 }
                 
-                
-                //Color Extraction & insert to DB
-                ColorExtract ce = new ColorExtract();
-                List<double[]> colorList  = ce.FeatureExtractRun(filePath);
-                
-                //Texture Extraction & insert to DB
-                TextureExtract te = new TextureExtract();
-                List<double[]> textureList  = te.FeatureExtractRun(filePath);
                
-                //ShapeExtraction & insert to DB
-                ShapeExtract se = new ShapeExtract();
-                List<double[]> shapeList  = se.FeatureExtractRun(filePath);
-                if(uploadMode){
-                	imgId = db.insertImage(fileName);
-	                db.insertCorrelogramVector(colorList, imgId);
-	                db.insertTextureVector(textureList, imgId);
-	                db.insertShapeVector(shapeList, imgId);
-                }
-                else if(!uploadMode && !rf){
-                	searchImage = new Image(imgId,fileName);
-                	searchImage.setColor(ArrayUtils.toPrimitive(ArrayUtils.toObject(colorList.get(0))));
-                	searchImage.setShape(ArrayUtils.toPrimitive(ArrayUtils.toObject(shapeList.get(0))));
-                	searchImage.setTexture(ArrayUtils.toPrimitive(ArrayUtils.toObject(textureList.get(0))));
-                	request.setAttribute("imageQuery", searchImage);
-                	Image [] results = getKRelevantImages(searchImage, Integer.parseInt(kNum));
-         	        request.setAttribute("images", Arrays.asList(results));
-                }
                 
             }
-        	}
             request.setAttribute("message", "Upload has been done successfully!");
          } catch (Exception ex) {
             request.setAttribute("message", "There was an error: " + ex.getMessage());
         }
         if(!uploadMode){
-        	if (!uploadMode && rf){
+        	if (!uploadMode && rf && !ServletFileUpload.isMultipartContent(request)){
             	searchImage = (Image) request.getSession().getAttribute("iq");
+            	kNum = (String) request.getParameter("kapa");
+            	request.setAttribute("kapa",Integer.parseInt(kNum));
             	Image [] positiveFeedback = getSelectedImages(request);
             	RocchioMethod(positiveFeedback); // update searchImage
             	request.setAttribute("imageQuery", searchImage);
+            	
             	Image [] results = getKRelevantImages(searchImage, Integer.parseInt(kNum));
             	request.setAttribute("images", Arrays.asList(results));
             }
@@ -168,7 +181,7 @@ public class UploadServlet extends HttpServlet {
         }
     }
     
-    private  Image [] getKRelevantImages(Image searchImg,int k) throws IllegalArgumentException {
+	private  Image [] getKRelevantImages(Image searchImg,int k) throws IllegalArgumentException {
     	Image [] images = new Image [k];
 		ArrayList<Image> img = db.getVectors();
 		double [] distance = new double[img.size()];

@@ -10,6 +10,23 @@ h1 {
   text-align: center;
 }
 
+.startForm{
+  width:250px;
+  height:120px;
+  background-color:#b0c4de;		
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -khtml-border-radius: 20px;
+    border-radius: 20px;
+    box-shadow: 10px 10px 5px #888888;
+}
+
+.formElement{
+	position:relative;
+	left:10px;	
+}
+	
+
 .sendButton {
   display: block;
   font-size: 16pt;
