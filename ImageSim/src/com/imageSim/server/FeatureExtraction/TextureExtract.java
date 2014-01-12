@@ -3,6 +3,7 @@ package com.imageSim.server.FeatureExtraction;
 
 
 import de.lmu.ifi.dbs.jfeaturelib.features.Haralick;
+import de.lmu.ifi.dbs.jfeaturelib.features.Tamura;
 import ij.process.ColorProcessor;
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import javax.imageio.ImageIO;
  * @author Franz
  */
 public class TextureExtract implements FeatureExtraction{
-	private Haralick descriptor =null;
+	private Tamura descriptor =null;
 	private File f = null;
 	public TextureExtract(){
 		
@@ -29,7 +30,7 @@ public class TextureExtract implements FeatureExtraction{
 	        ColorProcessor image;
 		    image = new ColorProcessor(ImageIO.read(f));
 		    // initialize the descriptor, set the properties and run it
-		    descriptor = new Haralick();
+		    descriptor = new Tamura();
 		    //descriptor.setProperties(prop);
 		    descriptor.run(image);
 				

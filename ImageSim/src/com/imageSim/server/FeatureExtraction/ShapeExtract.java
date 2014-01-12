@@ -11,6 +11,7 @@ import de.lmu.ifi.dbs.jfeaturelib.features.PHOG;
 public class ShapeExtract implements FeatureExtraction{
 	private File f;
 	private PHOG descriptor = null;
+	//private CentroidBoundaryDistance descriptor = null; instead of phog
 	public ShapeExtract(){
 		
 	}

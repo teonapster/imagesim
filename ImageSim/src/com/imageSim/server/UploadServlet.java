@@ -183,6 +183,8 @@ public class UploadServlet extends HttpServlet {
     
 	private  Image [] getKRelevantImages(Image searchImg,int k) throws IllegalArgumentException {
     	Image [] images = new Image [k];
+    	double [] distances = new double [k];// debug reason
+    	
 		ArrayList<Image> img = db.getVectors();
 		double [] distance = new double[img.size()];
 		MinHeap mh = new MinHeap(MinHeap.MAX_HEAP_SIZE);
@@ -191,7 +193,9 @@ public class UploadServlet extends HttpServlet {
 			distance[i] = originalQuery.getVectorSum();
 			mh.insert(new Distance(i,distance[i]));
 		}
+		
 		for(int i=0;i<k;++i){
+			distances[i] = mh.removemin().getDist();
 			images[i] = img.get(mh.removemin().getIndex());
 		}
 		

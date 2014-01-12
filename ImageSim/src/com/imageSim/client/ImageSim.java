@@ -78,8 +78,8 @@ public class ImageSim extends LayoutPanel implements EntryPoint {
 	    	  
 	    	  HTML html = new HTML(
 		    	      "<div class='startForm'> <form method='POST' action='fileUploaderServlet?upload=0' enctype='multipart/form-data' > "+
-		    	    		  "<div class='formElement'>Κ:</div><input type='text' class='formElement' value='3' name='kapa' id='kapa'/><br/>"+
-		    	    		  "<input type='file' name='file' id='file'/> "+
+		    	    		  "<div class='gwt-Label formElement'>Κ:</div><input type='text' class='gwt-TextBox formElement' value='3' name='kapa' id='kapa'/><br/>"+
+		    	    		  "<input type='file' name='file' id='file' class='formElement'/> "+
 		    	      "</br><input type='submit' class='formElement gwt-Button' value='Search' name='upload' id='upload' /></form></div>", true);
     
 	    	  
@@ -93,7 +93,7 @@ public class ImageSim extends LayoutPanel implements EntryPoint {
 		    // Add them to the root panel.
 	  	    VerticalPanel panel = new VerticalPanel();
 	  	  HTML html = new HTML(
-	    	      "<div class='startForm'><form method='POST' action='fileUploaderServlet' enctype='multipart/form-data' > File:"+
+	    	      "<div class='startForm'><form method='POST' action='fileUploaderServlet' enctype='multipart/form-data' > <div class='gwt-Label formElement'>File:</div>"+
         "<input type='file' class='formElement' name='file' id='file' multiple='multiple' /> <br/>"+
         //"Destination:<input type='text' value='/tmp' name='destination' />"+
         "</br><input type='submit' class='formElement gwt-Button'value='Upload' name='upload' id='upload' /></form></div>", true);

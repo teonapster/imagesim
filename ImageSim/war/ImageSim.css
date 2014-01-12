@@ -12,7 +12,7 @@ h1 {
 
 .startForm{
   width:250px;
-  height:120px;
+  min-height:20px;
   background-color:#b0c4de;		
     -moz-border-radius: 20px;
     -webkit-border-radius: 20px;
@@ -21,9 +21,23 @@ h1 {
     box-shadow: 10px 10px 5px #888888;
 }
 
+.resultTable{
+  width:550px;
+  min-height:50px;
+  background-color:#b0c4de;		
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -khtml-border-radius: 20px;
+    border-radius: 20px;
+    box-shadow: 10px 10px 5px #888888;
+    position: fixed;
+  left: 50%;
+  margin-left: -275px;
+}
+
 .formElement{
 	position:relative;
-	left:10px;	
+	left:15px;	
 }
 	
 
