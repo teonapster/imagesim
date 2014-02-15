@@ -42,9 +42,10 @@ public class UploadServlet extends HttpServlet {
     private static final int MAX_FILE_SIZE      = 1024 * 1024 * 40; // 40MB
     private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 100; //100MB
     private static final double ORIGINAL_QUERY_WEIGHT   = 1.0;
-    private static final double POSITIVE_FEEDBACK_WEIGHT   = 0.5;
+    private static final double POSITIVE_FEEDBACK_WEIGHT   = 0.2;
     private Image searchImage = null;
     private DBConnector db = new DBConnector();
+    private double textureWeight,shapeWeight,colorWeight;
     /**
      * handles file upload via HTTP POST method
      */
@@ -156,6 +157,18 @@ public class UploadServlet extends HttpServlet {
                 		kNum = fieldValue;
                 		request.setAttribute("kapa",Integer.parseInt(kNum));
                 	}
+                	else if(fieldName.equals("textureWeight")){
+                		textureWeight = Double.parseDouble(fieldValue);
+                		request.setAttribute("textureWeight",textureWeight);
+                	}
+                	else if(fieldName.equals("shapeWeight")){
+                		shapeWeight = Double.parseDouble(fieldValue);
+                		request.setAttribute("shapeWeight",shapeWeight);
+                	}
+                	else if(fieldName.equals("colorWeight")){
+                		colorWeight = Double.parseDouble(fieldValue);
+                		request.setAttribute("colorWeight",colorWeight);
+                	}
                 }
                 
                
@@ -167,9 +180,15 @@ public class UploadServlet extends HttpServlet {
         }
         if(!uploadMode){
         	if (!uploadMode && rf && !ServletFileUpload.isMultipartContent(request)){
-            	searchImage = (Image) request.getSession().getAttribute("iq");
+        		searchImage = (Image) request.getSession().getAttribute("iq");
+        		textureWeight = (double) (request.getSession().getAttribute("textureWeight"));
+        		shapeWeight = (double) (request.getSession().getAttribute("shapeWeight"));
+        		colorWeight = (double) (request.getSession().getAttribute("colorWeight"));
             	kNum = (String) request.getParameter("kapa");
             	request.setAttribute("kapa",Integer.parseInt(kNum));
+            	request.setAttribute("textureWeight",textureWeight);
+            	request.setAttribute("shapeWeight",shapeWeight);
+            	request.setAttribute("colorWeight",colorWeight);
             	Image [] positiveFeedback = getSelectedImages(request);
             	RocchioMethod(positiveFeedback); // update searchImage
             	request.setAttribute("imageQuery", searchImage);
@@ -190,7 +209,8 @@ public class UploadServlet extends HttpServlet {
 		MinHeap mh = new MinHeap(MinHeap.MAX_HEAP_SIZE);
 		for(int i=0;i<img.size();++i){
 			TSCVector originalQuery = Distance.euclideanDist(searchImg, img.get(i)); 
-			distance[i] = originalQuery.getVectorSum();
+			originalQuery.setWeights(textureWeight, shapeWeight, colorWeight);
+			distance[i] = originalQuery.getVectorSumNormalized();
 			mh.insert(new Distance(i,distance[i]));
 		}
 		

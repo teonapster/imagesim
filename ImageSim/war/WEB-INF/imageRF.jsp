@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <link type="text/css" rel="stylesheet" href="ImageSim.css">
-<title>Insert title here</title>
+<title>ImageSim results</title>
 </head>
 <body>
 <form method='POST' action='fileUploaderServlet?upload=0&rf=1' >
@@ -20,6 +20,10 @@ Image img = (Image)request.getAttribute("imageQuery");
 int COLUMNS = 4;
 boolean newRow=true;
 request.getSession().setAttribute("iq",img);
+request.getSession().setAttribute("textureWeight",request.getAttribute("textureWeight"));
+request.getSession().setAttribute("shapeWeight",request.getAttribute("shapeWeight"));
+request.getSession().setAttribute("colorWeight",request.getAttribute("colorWeight"));
+
 for(int i=0;i<results.size();++i){%>
 <%if(newRow){ newRow=false;%>
 <tr>

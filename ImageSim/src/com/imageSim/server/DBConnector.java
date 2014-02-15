@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.imageSim.server.FeatureExtraction.TextureExtract;
 import com.imageSim.shared.Image;
 
 public class DBConnector {
@@ -152,6 +153,7 @@ public class DBConnector {
 				id = rs.getInt(1);
 				imagePath = rs.getString(2);
 				t = ArrayUtils.toPrimitive((Double[])rs.getArray(3).getArray());
+				t= TextureExtract.normalizeTextureTable(t);
 				s = ArrayUtils.toPrimitive((Double[])rs.getArray(4).getArray());
 				c = ArrayUtils.toPrimitive((Double[])rs.getArray(5).getArray());
 				

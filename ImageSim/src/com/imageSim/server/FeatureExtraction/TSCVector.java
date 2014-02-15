@@ -7,9 +7,11 @@ public class TSCVector {
 	private double texture;
 	private double shape;
 	private double color;
-	private static final double TEXTURE_WEIGHT = 0.5;
-	private static final double SHAPE_WEIGHT = 1;
-	private static final double COLOR_WEIGHT = 0.8;
+	private double TEXTURE_WEIGHT = 0.5	;
+	private double SHAPE_WEIGHT = 0.5;
+	private double COLOR_WEIGHT = 0.5;
+	private double NORMALIZATION_MAX = 100.0;
+	private double NORMALIZATION_MIN = 0.0;
 	
 	public TSCVector(double t,double s,double c){
 		texture = t;
@@ -17,7 +19,14 @@ public class TSCVector {
 		color = c;
 	}
 	
-	public double getVectorSum(){
+	public void setWeights(double t, double s, double c){
+		TEXTURE_WEIGHT = t;
+		SHAPE_WEIGHT = s;
+		COLOR_WEIGHT = c;
+	}
+	
+	public double getVectorSumNormalized(){
+		
 		return texture*TEXTURE_WEIGHT+shape*SHAPE_WEIGHT+color*COLOR_WEIGHT;
 	}
 	

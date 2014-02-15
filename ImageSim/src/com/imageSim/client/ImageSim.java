@@ -78,7 +78,10 @@ public class ImageSim extends LayoutPanel implements EntryPoint {
 	    	  
 	    	  HTML html = new HTML(
 		    	      "<div class='startForm'> <form method='POST' action='fileUploaderServlet?upload=0' enctype='multipart/form-data' > "+
-		    	    		  "<div class='gwt-Label formElement'>Κ:</div><input type='text' class='gwt-TextBox formElement' value='3' name='kapa' id='kapa'/><br/>"+
+		    	    		  "<div class='gwt-Label formElement'>Κ:</div><input type='text' class='gwt-TextBox formElement' value='10' name='kapa' id='kapa'/><br/>"+
+		    	    		  "<div class='gwt-Label formElement'>Texture Weight (0-1):</div><input type='text' class='gwt-TextBox formElement' value='1' name='textureWeight' id='TextureWeight'/><br/>"+
+		    	    		  "<div class='gwt-Label formElement'>Shape Weight (0-1):</div><input type='text' class='gwt-TextBox formElement' value='1' name='shapeWeight' id='ShapeWeight'/><br/>"+
+		    	    		  "<div class='gwt-Label formElement'>Color Weight (0-1):</div><input type='text' class='gwt-TextBox formElement' value='1' name='colorWeight' id='ColorWeight'/><br/>"+
 		    	    		  "<input type='file' name='file' id='file' class='formElement'/> "+
 		    	      "</br><input type='submit' class='formElement gwt-Button' value='Search' name='upload' id='upload' /></form></div>", true);
     
