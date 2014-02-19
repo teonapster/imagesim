@@ -14,16 +14,17 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 /**
- * This is is a very basic Class that demonstrates the usage of a descriptor with plain Java without the commandline
+ * This is  is a very basic Class that demonstrates the usage of a descriptor with plain Java without the commandline
  * exctractor.
  *
  * @author Franz
  */
 public class TextureExtract implements FeatureExtraction{
-	private Tamura descriptor =null;
+	//private Tamura descriptor =null;
+	private Haralick descriptor =null;
 	private File f = null;
 	public static double minVal = 0.0;
-	public static double defaultMaxVal = 2000.0;
+	public static double defaultMaxVal = 1800.0;
 	public static double normalizedMaxVal = 1.0;
 	public TextureExtract(){
 		
@@ -36,8 +37,8 @@ public class TextureExtract implements FeatureExtraction{
 
 	        ColorProcessor image;
 		    image = new ColorProcessor(ImageIO.read(f));
-		    // initialize the descriptor, set the properties and run it
-		    descriptor = new Tamura();
+		    // initialize the descriptor , set the properties and run it
+		    descriptor = new Haralick();
 		    //descriptor.setProperties(prop);
 		    descriptor.run(image);
 				

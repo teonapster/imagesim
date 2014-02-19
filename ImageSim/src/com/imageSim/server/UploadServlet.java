@@ -127,10 +127,11 @@ public class UploadServlet extends HttpServlet {
                     ColorExtract ce = new ColorExtract();
                     List<double[]> colorList  = ce.FeatureExtractRun(filePath);
                     
-                    //Texture Extraction & insert to DB
+                    //Texture Extraction & insert to DB plus normalization
                     TextureExtract te = new TextureExtract();
                     List<double[]> textureList  = te.FeatureExtractRun(filePath);
-                   
+                    textureList.set(0, TextureExtract.normalizeTextureTable(textureList.get(0)));
+                    
                     //ShapeExtraction & insert to DB
                     ShapeExtract se = new ShapeExtract();
                     List<double[]> shapeList  = se.FeatureExtractRun(filePath);
@@ -215,8 +216,9 @@ public class UploadServlet extends HttpServlet {
 		}
 		
 		for(int i=0;i<k;++i){
-			distances[i] = mh.removemin().getDist();
-			images[i] = img.get(mh.removemin().getIndex());
+			Distance curDist = mh.removemin();
+			distances[i] = curDist.getDist();
+			images[i] = img.get(curDist.getIndex());
 		}
 		
 		return images;

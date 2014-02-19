@@ -192,6 +192,7 @@ public class DBConnector {
 				id = rs.getInt(1);
 				imagePath = rs.getString(2);
 				t = ArrayUtils.toPrimitive((Double[])rs.getArray(3).getArray());
+				t= TextureExtract.normalizeTextureTable(t);
 				s = ArrayUtils.toPrimitive((Double[])rs.getArray(4).getArray());
 				c = ArrayUtils.toPrimitive((Double[])rs.getArray(5).getArray());
 				

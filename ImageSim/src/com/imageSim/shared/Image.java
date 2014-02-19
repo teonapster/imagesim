@@ -33,7 +33,7 @@ public class Image implements Serializable {
 		this.filename = filename;
 	}
 	
-	//*******************Define Setters HERE******************//
+	//******************* Define Setters HERE******************//
 	public void setTexture(double [] texture){
 		this.texture = new double[texture.length];
 		this.texture = texture;
